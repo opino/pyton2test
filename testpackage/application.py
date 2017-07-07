@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 import os.path
+
 from pathlib import Path
+from os import listdir
+from os.path import isfile, join
+from os import walk
 
 #############################################################################
 ##
@@ -97,37 +101,21 @@ class MainWindow(QMainWindow):
         dialog.setFileMode(QFileDialog.Directory)
         dialog.setOption(QFileDialog.ShowDirsOnly, True)
         
-        p = Path('/')
+        
         if dialog.exec_():
             for d in dialog.selectedFiles():
                 print(d)
-                self.textEdit.append(d.__str__() + "  dialog.selectedFiles()")
-
+                self.textEdit.append( d.__str__() + "  dialog.selectedFiles()")
+               
         #p = Path('/')
-        
+        p = Path('C:/')
         for x in p.iterdir():
             if x.is_dir():
                 self.textEdit.append( x.__str__() + "  purepath")
-                
-                
-                
+              
         #QApplication.setOverrideCursor(Qt.WaitCursor)
         #elf.textEdit.setPlainText(self.curFile.title() + "  self.curFile.title()")
         #QApplication.restoreOverrideCursor()
-        
-               
-       
-        #filename = "bestand.py" 
-               
-        #if not os.path.isfile(filename):
-        #    print('File does not exist.')
-        #else:
-            # Open the file as f. 
-            # The function readlines() reads the file.
-        #    with open(filename) as f:
-        #        content = f.read().splitlines()
-        
-       
         mystring = os.path.dirname(self.curFile.title()).__str__()
         self.textEdit.append(mystring.__str__() + "  dirname")
         
@@ -135,11 +123,61 @@ class MainWindow(QMainWindow):
         mystring = os.path.abspath(self.curFile.title()).__str__()
         self.textEdit.append(mystring.__str__() + "  abspath")
         
-        mystring = os.path.  abspath(self.curFile.title()).__str__()
+        mystring = os.path.abspath(self.curFile.title()).__str__()
         self.textEdit.append(mystring.__str__() + "  abspath")
+    
+    def myOsCommand(self): 
         
+        dialog = QFileDialog(self)
+        dialog.setFileMode(QFileDialog.Directory)
+        dialog.setOption(QFileDialog.ShowDirsOnly, True)
         
+        if dialog.exec_():
+            for d in dialog.selectedFiles():
+                print(d)
+                self.textEdit.append( d.__str__() + "  dialog.selectedFiles()")
+        print(d)
+        print("debug")
+        command = "cd " + d    
+        os.system(command)
+        command = "pwd"
+        os.system(command)
+        print("debug") 
+        #time.sleep(0.3)
+        #print("debug") 
+        return
         
+    # myArray
+    # Funktion soll zeigen wie man einzelene Strings in einem Path vergleichen kann
+    #    
+    def myArray(self):
+        
+        dialog = QFileDialog(self)
+        dialog.setFileMode(QFileDialog.Directory)
+        dialog.setOption(QFileDialog.ShowDirsOnly, True)
+        
+        if dialog.exec_():
+            for d in dialog.selectedFiles():
+                #print(d)
+                self.textEdit.append( d.__str__() + "  dialog.selectedFiles()")
+        #for root, dirs, files in os.walk(d):
+            #for file in files:
+                #if file.endswith(".txt"):
+                   #print(os.path.join(root, file))
+            #for dir in dirs:
+                #if file.endswith(".txt"):
+                   #print(os.path.join(root, dir))
+                   #print(dir)
+        #print(d[3])
+        mydirs = os.listdir(d)
+        for x in mydirs:
+            print(x)
+                    
+        return
+    
+    def myfunction3(self):        
+        return
+    
     def save(self):
         if self.curFile:
             return self.saveFile(self.curFile)
@@ -330,7 +368,10 @@ class MainWindow(QMainWindow):
 
     def myfunction(self):
         self.statusBar().showMessage("MyMessage", 2000)
-        self.myopen() 
+        #self.myopen() 
+        #self.myOsCommand()
+        self.myArray()
+        #self.myfunction3()       
         self.statusBar().showMessage(self.curFile.title() + " Debug STH", 20000) 
               
         return      
