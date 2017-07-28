@@ -1,10 +1,13 @@
 #!/usr/bin/env python
-import os.path
+import os
 
 from pathlib import Path
 from os import listdir
 from os.path import isfile, join
 from os import walk
+from os import popen
+import subprocess
+from subprocess import call
 
 #############################################################################
 ##
@@ -55,6 +58,8 @@ from PyQt5.QtWidgets import (QAction, QApplication, QFileDialog, QMainWindow,
         QMessageBox, QTextEdit)
 from test.test_linecache import FILENAME
 from PyQt5.Qt import QFile, QDir
+from pickle import FALSE
+
 
 
 class MainWindow(QMainWindow):
@@ -152,31 +157,82 @@ class MainWindow(QMainWindow):
     #    
     def myArray(self):
         
+        print("BEGIN myArray")
         dialog = QFileDialog(self)
         dialog.setFileMode(QFileDialog.Directory)
         dialog.setOption(QFileDialog.ShowDirsOnly, True)
         
+        global d
         if dialog.exec_():
             for d in dialog.selectedFiles():
                 #print(d)
                 self.textEdit.append( d.__str__() + "  dialog.selectedFiles()")
-        #for root, dirs, files in os.walk(d):
-            #for file in files:
-                #if file.endswith(".txt"):
-                   #print(os.path.join(root, file))
-            #for dir in dirs:
-                #if file.endswith(".txt"):
-                   #print(os.path.join(root, dir))
-                   #print(dir)
-        #print(d[3])
+        
+        print("a listing of all files in dir")
+       
         mydirs = os.listdir(d)
         for x in mydirs:
             print(x)
-                    
+         
+        print("END myArray")            
         return
     
-    def myfunction3(self):        
+    def myfunction3(self): 
+        # Function demonstrates how to maipulate path
+        print("BEGIN myfunction3")
+        
+        
+        mydirs = os.listdir(d)
+        for x in mydirs:
+            print(x)            
+        
+        
+        print("path.split myfunction3") 
+        #Pfad in zwei Teil splitten 
+        mydirs1 = os.path.split(d)
+        for x in mydirs1:
+            print(x)
+        
+                
+        print("END myfunction3")
         return
+    
+    def myfunction4(self): 
+        # myfunction4 demonstrates os.walk
+        print("BEGIN myfunction4")
+    
+        for subdir, dirs, files in os.walk(d):
+                print ("Alle Dateien finden")
+                for file in files:
+                    print (os.path.join(subdir, file))
+                print ("Alle Verzeichnisse finden")
+                for dir in dirs:
+                    print (os.path.join(subdir, dir))
+        print("END myfunction4")
+        return
+    
+    def myfunction5(self): 
+        # myfunction5 searches for all *.txt files
+        print("BEGIN myfunction5")
+    
+        for subdir, dirs, files in os.walk(d):
+                for file in files:
+                    info = os.stat(os.path.join(subdir, file))
+                    print (file)
+                    if file.split('.')[-1] == 'txt':
+                        print ("Datei ist eine Textdatei")
+                        print (os.path.join(subdir, file))
+                    #print (os.path.join(subdir, file))
+         
+        #https://stackoverflow.com/questions/89228/calling-an-external-command-in-python       
+        print("END myfunction5")
+        #jar file muss im selben verzeichniss liegen wie das python Projekt
+        #os.popen("java -jar saxon9he.jar")
+        #print (subprocess.Popen("java -jar saxon9he.jar", shell=True, stdout=subprocess.PIPE).stdout.read())
+        print (subprocess.Popen("ping localhost", stdout=subprocess.PIPE).stdout.read())
+        #proc = subprocess.Popen('ping localhost', stdin = subprocess.PIPE, stdout = subprocess.PIPE)
+        return
+    
     
     def save(self):
         if self.curFile:
@@ -371,13 +427,14 @@ class MainWindow(QMainWindow):
         #self.myopen() 
         #self.myOsCommand()
         self.myArray()
-        #self.myfunction3()       
+        #self.myfunction3()   
+        #self.myfunction4()     
+        self.myfunction5()
         self.statusBar().showMessage(self.curFile.title() + " Debug STH", 20000) 
               
         return      
         
 if __name__ == '__main__':
-
     import sys
 
     app = QApplication(sys.argv)
